@@ -1,6 +1,7 @@
 solved
 
 # Build artifacts (user-space)
+boilerplate/rootfs/
 boilerplate/engine
 boilerplate/memory_hog
 boilerplate/cpu_hog
