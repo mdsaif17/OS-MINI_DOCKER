@@ -1,7 +1,37 @@
-# Multi-Container Runtime with Kernel Memory Monitor
+# 0S JUCKFRUIT : Multi-Container Runtime with Kernel Memory Monitor
+
+##  Project Overview
+
+This project implements a lightweight Linux container runtime in C, along with a kernel-space memory monitoring module. The system is designed to simulate core containerization concepts such as process isolation, resource control, and concurrent execution, while providing a practical understanding of operating system internals.
+
+The project consists of two main components:
+
+1. **User-Space Runtime and Supervisor (`engine.c`)**
+   A long-running supervisor process that manages multiple containers concurrently. It is responsible for:
+
+   * Creating isolated containers using Linux namespaces (PID, UTS, and mount)
+   * Managing container lifecycle (start, stop, run, and status tracking)
+   * Handling CLI commands via an IPC mechanism
+   * Capturing container output through a bounded-buffer logging system using producer-consumer synchronization
+
+2. **Kernel-Space Memory Monitor (`monitor.c`)**
+   A Linux Kernel Module (LKM) that monitors memory usage of container processes. It:
+
+   * Tracks registered container PIDs using a kernel linked list
+   * Periodically checks Resident Set Size (RSS)
+   * Enforces memory policies:
+
+     * **Soft limit** → logs a warning when exceeded
+     * **Hard limit** → terminates the container process
+   * Communicates with user-space via `ioctl`
+
+Additionally, the runtime is used to perform controlled experiments on Linux scheduling behavior by running concurrent workloads with different priorities and analyzing their execution characteristics.
+
+Overall, this project demonstrates key operating system concepts including process isolation, inter-process communication, synchronization, memory management, and scheduling.
 
 ---
 
+ 
 ##  1. Team Information
 
 * T Mohammed Saif  ===> [PES1UG24CS636]
@@ -313,6 +343,8 @@ Kernel module enforces limits because:
 sudo ./engine start cpu-high ./rootfs "/cpu_hog 30" --nice -10
 sudo ./engine start cpu-low ./rootfs "/cpu_hog 30" --nice 10
 ```
+
+![Screenshot 1](screenshots/7.jpeg)
 
 ---
 
