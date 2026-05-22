@@ -151,8 +151,10 @@ static void timer_callback(struct timer_list *t)
      *   - enforce hard limit and then remove the entry
      *   - avoid use-after-free while deleting during iteration
      * ============================================================== */
-        struct monitored_entry *entry, *tmp;
+    struct monitored_entry *entry, *tmp;
     long rss;
+
+    (void)t;
 
     spin_lock(&list_lock);
     list_for_each_entry_safe(entry, tmp, &monitored_list, list) {
@@ -222,7 +224,7 @@ static long monitor_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
          *   - validate allocation and limits
          *   - insert into the shared list under the chosen lock
          * ============================================================== */
-struct monitored_entry *entry;
+        struct monitored_entry *entry;
 
         if (req.soft_limit_bytes > req.hard_limit_bytes) {
             printk(KERN_ERR "[container_monitor] soft > hard\n");

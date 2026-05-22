@@ -1001,8 +1001,8 @@ int main(int argc, char *argv[])
 
     if (strcmp(argv[1], "stop") == 0)
         return cmd_stop(argc, argv);
-
     usage(argv[0]);
     return 1;
 }
+
 
